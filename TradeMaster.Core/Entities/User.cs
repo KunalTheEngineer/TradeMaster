@@ -12,5 +12,11 @@ namespace TradeMaster.Core.Entities
         public string PasswordHash { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
+
+        public ICollection<Holding> Holdings { get; set; } = new List<Holding>();
+
+        public ICollection<Watchlist> Watchlists { get; set; } = new List<Watchlist>();
     }
 }

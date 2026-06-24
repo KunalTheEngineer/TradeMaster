@@ -17,5 +17,9 @@ namespace TradeMaster.Core.Entities
         public int Qunatity { get; set; }
 
         public decimal AveragePrice { get; set; }
+
+        public User User { get; set; } = null!;
+
+        public Stock Stock { get; set; } = null!;
     }
 }

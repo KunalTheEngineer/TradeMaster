@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TradeMaster.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TradeMaster.Infrastructure.Data;
 namespace TradeMaster.Infrastructure.Migrations
 {
     [DbContext(typeof(TradeMasterDbContext))]
-    partial class TradeMasterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260623115035_AddRelationships")]
+    partial class AddRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -24,5 +24,9 @@ namespace TradeMaster.Core.Entities
         public decimal Price { get; set; }
 
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
+
+        public User User { get; set; } = null!;
+
+        public Stock Stock { get; set; } = null!;
     }
 }
