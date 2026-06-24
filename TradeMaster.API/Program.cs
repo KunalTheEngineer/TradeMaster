@@ -48,6 +48,10 @@ builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IHoldingRepository, HoldingRepository>();
+builder.Services.AddScoped<IHoldingService, HoldingService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 
 // Add services to the container.
