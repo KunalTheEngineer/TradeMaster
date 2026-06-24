@@ -27,7 +27,7 @@ namespace TradeMaster.Infrastructure.Services
             {
                 FullName = request.FullName,
                 Email = request.Email,
-                PasswordHash = request.Password
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password)
             };
 
             await _userRepository.AddUserAsync(user);
@@ -44,7 +44,9 @@ namespace TradeMaster.Infrastructure.Services
                 return "User Not Found !";
             }
 
-            if(user.PasswordHash != request.Password)
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
+
+            if(!isValidPassword)
             {
                 return "Invalid Password !";
             }
