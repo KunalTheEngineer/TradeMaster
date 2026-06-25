@@ -8,10 +8,12 @@ namespace TradeMaster.Infrastructure.Services
     public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IJwtService _jwtService;
 
-        public AuthService(IUserRepository userRepository)
+        public AuthService(IUserRepository userRepository, IJwtService jwtService)
         {
             _userRepository = userRepository;
+            _jwtService = jwtService;
         }
 
         public async Task<string> RegisterAsync(RegisterRequestDto request)
@@ -51,7 +53,9 @@ namespace TradeMaster.Infrastructure.Services
                 return "Invalid Password !";
             }
 
-            return "Login Successful !";
+            var token = _jwtService.GenerateToken(user.Email);
+
+            return token;
         }
     }
 }
