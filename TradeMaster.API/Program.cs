@@ -44,8 +44,11 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 ));
 
 builder.Services.AddScoped<IAuthService,AuthService>();
+builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+
 
 // Add services to the container.
 
