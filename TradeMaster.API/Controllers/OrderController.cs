@@ -41,5 +41,13 @@ namespace TradeMaster.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("sell")]
+        public async Task<IActionResult> SellOrder(CreateOrderDto request)
+        {
+            var result = await _orderService.SellOrderAsync(request);
+
+            return Ok(result);
+        }
     }
 }
