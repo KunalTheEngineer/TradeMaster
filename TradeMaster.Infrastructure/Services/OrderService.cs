@@ -26,7 +26,7 @@ namespace TradeMaster.Infrastructure.Services
                 StockId = request.StockId,
                 Quantity = request.Quantity,
                 Price = request.Price,
-                OrderType = OrderType.Buy,   
+                OrderType = OrderType.Buy,
                 OrderStatus = OrderStatus.Completed,
                 OrderDate = DateTime.UtcNow,
             };
@@ -35,7 +35,7 @@ namespace TradeMaster.Infrastructure.Services
 
             var holding = await _holdingRepository.GetHoldingByUserAndStockAsync(request.UserId, request.StockId);
 
-            if(holding == null)
+            if (holding == null)
             {
                 holding = new Holding
                 {
@@ -58,7 +58,7 @@ namespace TradeMaster.Infrastructure.Services
                 await _holdingRepository.UpdateHoldingAsync(holding);
             }
 
-                return "Buy Order Placed Successfully !";
+            return "Buy Order Placed Successfully !";
         }
 
         public async Task<List<OrderResponseDto>> GetAllOrdersAsync()
@@ -82,7 +82,7 @@ namespace TradeMaster.Infrastructure.Services
         {
             var order = await _orderRepository.GetOrderByIdAsync(orderId);
 
-            if(order == null)
+            if (order == null)
             {
                 return null;
             }
@@ -99,5 +99,40 @@ namespace TradeMaster.Infrastructure.Services
                 OrderStatus = order.OrderStatus.ToString()
             };
         }
+
+        public async Task<string> SellOrderAsync(CreateOrderDto request)
+        {
+            var holding = await _holdingRepository.GetHoldingByUserAndStockAsync(request.UserId, request.StockId);
+
+            if (holding == null)
+            {
+                return "No Holding Found !";
+            }
+
+            if (holding.Qunatity < request.Quantity)
+            {
+                return "Insufficient Holdings !";
+            }
+
+            holding.Qunatity -= request.Quantity;
+
+            await _holdingRepository.UpdateHoldingAsync(holding);
+
+            var order = new Order
+            {
+                UserId = request.UserId,
+                StockId = request.StockId,
+                Quantity = request.Quantity,
+                Price = request.Price,
+                OrderType = OrderType.Sell,
+                OrderStatus = OrderStatus.Completed,
+                OrderDate = DateTime.UtcNow
+            };
+
+            await _orderRepository.AddOrderAsync(order);
+
+            return "Sell Order Placed Successfully !";
+        }
+
     }
 }
