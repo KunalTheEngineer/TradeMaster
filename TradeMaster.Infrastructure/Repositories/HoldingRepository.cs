@@ -24,5 +24,25 @@ namespace TradeMaster.Infrastructure.Repositories
 
             return await _context.Holdings.Where(x => x.UserID == userId).ToListAsync();
         }
+
+        public async Task<Holding?> GetHoldingByUserAndStockAsync(int userId, int stockId)
+        {
+            return await _context.Holdings.FirstOrDefaultAsync(x => x.UserID == userId && 
+                                                                    x.StockID == stockId);
+        }
+
+        public async Task AddHoldingAsync(Holding holding)
+        {
+            await _context.Holdings.AddAsync(holding);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateHoldingAsync(Holding holding)
+        {
+            _context.Holdings.Update(holding);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
