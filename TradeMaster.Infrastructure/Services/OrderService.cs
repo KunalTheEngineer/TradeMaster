@@ -10,10 +10,12 @@ namespace TradeMaster.Infrastructure.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IHoldingRepository _holdingRepository;
 
-        public OrderService(IOrderRepository orderRepository)
+        public OrderService(IOrderRepository orderRepository, IHoldingRepository holdingRepository)
         {
             _orderRepository = orderRepository;
+            _holdingRepository = holdingRepository;
         }
 
         public async Task<string> BuyOrderAsync(CreateOrderDto request)
@@ -31,7 +33,32 @@ namespace TradeMaster.Infrastructure.Services
 
             await _orderRepository.AddOrderAsync(order);
 
-            return "Buy Order Placed Successfully !";
+            var holding = await _holdingRepository.GetHoldingByUserAndStockAsync(request.UserId, request.StockId);
+
+            if(holding == null)
+            {
+                holding = new Holding
+                {
+                    UserID = request.UserId,
+                    StockID = request.StockId,
+                    Qunatity = request.Quantity,
+                    AveragePrice = request.Price
+                };
+
+                await _holdingRepository.AddHoldingAsync(holding);
+            }
+            else
+            {
+                int oldQuantity = holding.Qunatity;
+
+                holding.Qunatity += request.Quantity;
+
+                holding.AveragePrice = ((holding.AveragePrice * oldQuantity) + (request.Price * request.Quantity)) / holding.Qunatity;
+
+                await _holdingRepository.UpdateHoldingAsync(holding);
+            }
+
+                return "Buy Order Placed Successfully !";
         }
 
         public async Task<List<OrderResponseDto>> GetAllOrdersAsync()
