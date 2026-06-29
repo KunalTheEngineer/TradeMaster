@@ -11,11 +11,13 @@ namespace TradeMaster.Infrastructure.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IHoldingRepository _holdingRepository;
+        private readonly ITransactionRepository _transactionRepository;
 
-        public OrderService(IOrderRepository orderRepository, IHoldingRepository holdingRepository)
+        public OrderService(IOrderRepository orderRepository, IHoldingRepository holdingRepository, ITransactionRepository transactionRepository)
         {
             _orderRepository = orderRepository;
             _holdingRepository = holdingRepository;
+            _transactionRepository = transactionRepository;
         }
 
         public async Task<string> BuyOrderAsync(CreateOrderDto request)
@@ -57,6 +59,15 @@ namespace TradeMaster.Infrastructure.Services
 
                 await _holdingRepository.UpdateHoldingAsync(holding);
             }
+
+            var transaction = new Transaction
+            {
+                OrderId = order.OrderId,
+                Amount = request.Quantity * request.Price,
+                TransactionDate = DateTime.UtcNow
+            };
+
+            await _transactionRepository.AddTransactionAsync(transaction);
 
             return "Buy Order Placed Successfully !";
         }
@@ -130,6 +141,15 @@ namespace TradeMaster.Infrastructure.Services
             };
 
             await _orderRepository.AddOrderAsync(order);
+
+            var transaction = new Transaction
+            {
+                OrderId = order.OrderId,
+                Amount = request.Quantity * request.Price,
+                TransactionDate = DateTime.UtcNow
+            };
+
+            await _transactionRepository.AddTransactionAsync(transaction);
 
             return "Sell Order Placed Successfully !";
         }
