@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Extensions.Logging;
 using TradeMaster.Application.DTOs;
 using TradeMaster.Application.Interfaces;
 using TradeMaster.Core.Entities;
@@ -12,16 +13,41 @@ namespace TradeMaster.Infrastructure.Services
         private readonly IOrderRepository _orderRepository;
         private readonly IHoldingRepository _holdingRepository;
         private readonly ITransactionRepository _transactionRepository;
+        private readonly IStockRepository _stockRepository;
+        private readonly ILogger<OrderService> _logger;
 
-        public OrderService(IOrderRepository orderRepository, IHoldingRepository holdingRepository, ITransactionRepository transactionRepository)
+        public OrderService(IOrderRepository orderRepository, IHoldingRepository holdingRepository, ITransactionRepository transactionRepository, ILogger<OrderService> logger, IStockRepository stockRepository)
         {
             _orderRepository = orderRepository;
             _holdingRepository = holdingRepository;
             _transactionRepository = transactionRepository;
+            _stockRepository = stockRepository;
+            _logger = logger;
+            
         }
 
         public async Task<string> BuyOrderAsync(CreateOrderDto request)
         {
+           
+            var stock = await _stockRepository.GetStockByIdAsync(request.StockId);
+
+            if (stock == null)
+            {
+                _logger.LogWarning(
+                    "Buy order failed. Stock {StockId} not found for User {UserId}.",
+                    request.StockId,
+                    request.UserId);
+
+                throw new KeyNotFoundException("Stock not found.");
+            }
+
+            _logger.LogInformation(
+           "User {UserId} is placing a buy order for Stock {StockId}. Quantity: {Quantity}, Price: {Price}.",
+           request.UserId,
+           request.StockId,
+           request.Quantity,
+           request.Price);
+
             var order = new Order
             {
                 UserId = request.UserId,
@@ -69,6 +95,14 @@ namespace TradeMaster.Infrastructure.Services
 
             await _transactionRepository.AddTransactionAsync(transaction);
 
+            _logger.LogInformation(
+     "BUY ORDER SUCCESS | User: {UserId} | Stock: {Symbol} | Quantity: {Quantity} | Price: {Price} | Total: {Amount}",
+     request.UserId,
+     stock.Symbol,
+     request.Quantity,
+     request.Price,
+     request.Quantity * request.Price);
+
             return "Buy Order Placed Successfully !";
         }
 
@@ -113,6 +147,26 @@ namespace TradeMaster.Infrastructure.Services
 
         public async Task<string> SellOrderAsync(CreateOrderDto request)
         {
+
+            var stock = await _stockRepository.GetStockByIdAsync(request.StockId);
+
+            if (stock == null)
+            {
+                _logger.LogWarning(
+                    "Sell order failed. Stock {StockId} not found for User {UserId}.",
+                    request.StockId,
+                    request.UserId);
+
+                throw new KeyNotFoundException("Stock not found.");
+            }
+
+            _logger.LogInformation(
+            "User {UserId} is placing a sell order for {Symbol}. Quantity: {Quantity}, Price: {Price}.",
+            request.UserId,
+            stock.Symbol,
+            request.Quantity,
+            request.Price);
+
             var holding = await _holdingRepository.GetHoldingByUserAndStockAsync(request.UserId, request.StockId);
 
             if (holding == null)
@@ -151,7 +205,32 @@ namespace TradeMaster.Infrastructure.Services
 
             await _transactionRepository.AddTransactionAsync(transaction);
 
+
+            _logger.LogInformation(
+            "SELL ORDER SUCCESS | User: {UserId} | Stock: {Symbol} | Quantity: {Quantity} | Price: {Price} | Total: {Amount}",
+             request.UserId,
+              stock.Symbol,
+             request.Quantity,
+             request.Price,
+             request.Quantity * request.Price);
+
             return "Sell Order Placed Successfully !";
+        }
+
+        public async Task<List<OrderHistoryDto>> GetOrderHistoryAsync(int userId)
+        {
+            var orders = await _orderRepository.GetOrdersByUserIdAsync(userId);
+
+            return orders.Select(order => new OrderHistoryDto
+            {
+                OrderId = order.OrderId,
+                StockName = order.Stock.CompanyName,
+                OrderType = order.OrderType.ToString(),
+                Quantity = order.Quantity,
+                Price = order.Price,
+                OrderStatus = order.OrderStatus.ToString(),
+                OrderDate = order.OrderDate
+            }).ToList();
         }
 
     }
