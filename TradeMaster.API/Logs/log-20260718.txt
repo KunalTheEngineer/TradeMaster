@@ -1,0 +1,24 @@
+2026-07-18 15:12:41.759 +05:30 [INF] User 1 (kunalthakare2205@gmail.com) logged in successfully.
+2026-07-18 15:13:20.409 +05:30 [INF] User 1 is placing a buy order for Stock 1. Quantity: 5, Price: 4100.
+2026-07-18 15:13:20.790 +05:30 [INF] Buy order completed successfully. User 1, Stock 1, Quantity 5, Total Amount 20500.
+2026-07-18 15:20:29.180 +05:30 [INF] User 1 (kunalthakare2205@gmail.com) logged in successfully.
+2026-07-18 15:21:05.143 +05:30 [INF] User 1 is placing a buy order for Stock 1. Quantity: 10, Price: 3850.
+2026-07-18 15:21:05.415 +05:30 [INF] BUY ORDER SUCCESS | User: 1 | Stock: TCS | Quantity: 10 | Price: 3850 | Total: 38500
+2026-07-18 15:21:18.536 +05:30 [INF] User 1 is placing a buy order for Stock 111. Quantity: 10, Price: 3850.
+2026-07-18 15:21:18.585 +05:30 [WRN] Buy order failed. Stock 111 not found for User 1.
+2026-07-18 15:21:18.695 +05:30 [ERR] Stock not found.
+System.Collections.Generic.KeyNotFoundException: Stock not found.
+   at TradeMaster.Infrastructure.Services.OrderService.BuyOrderAsync(CreateOrderDto request) in F:\SDE Projects\TradeMaster\TradeMaster.Infrastructure\Services\OrderService.cs:line 47
+   at TradeMaster.API.Controllers.OrderController.BuyOrder(CreateOrderDto request) in F:\SDE Projects\TradeMaster\TradeMaster.API\Controllers\OrderController.cs:line 24
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at TradeMaster.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\SDE Projects\TradeMaster\TradeMaster.API\Middleware\ExceptionMiddleware.cs:line 21
