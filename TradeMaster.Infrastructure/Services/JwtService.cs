@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TradeMaster.Application.Interfaces;
+using TradeMaster.Core.Entities;
 
 namespace TradeMaster.Infrastructure.Services
 {
@@ -16,11 +17,13 @@ namespace TradeMaster.Infrastructure.Services
             _configuration = configuration;
         }
 
-        public string GenerateToken(string email)
+        public string GenerateToken(User user)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Email, email)
+                 new Claim(ClaimTypes.NameIdentifier, user.USerID.ToString()),
+                 new Claim(ClaimTypes.Email, user.Email),
+                 new Claim(ClaimTypes.Role, user.Role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
