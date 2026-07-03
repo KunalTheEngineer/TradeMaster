@@ -32,5 +32,14 @@ namespace TradeMaster.Infrastructure.Repositories
         {
             return await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == orderId);
         }
+
+        public async Task<List<Order>> GetOrdersByUserIdAsync(int userId)
+        {
+            return await _context.Orders
+                .Where(o => o.UserId == userId)
+                .Include(o => o.Stock)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+        }
     }
 }
