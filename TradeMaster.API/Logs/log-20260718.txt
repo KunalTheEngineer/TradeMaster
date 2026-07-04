@@ -22,3 +22,10 @@ System.Collections.Generic.KeyNotFoundException: Stock not found.
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at TradeMaster.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in F:\SDE Projects\TradeMaster\TradeMaster.API\Middleware\ExceptionMiddleware.cs:line 21
+2026-07-18 16:41:23.215 +05:30 [INF] User 1 (kunalthakare2205@gmail.com) logged in successfully.
+2026-07-18 16:48:50.566 +05:30 [INF] User 1 (kunalthakare2205@gmail.com) logged in successfully.
+2026-07-18 16:54:24.729 +05:30 [INF] User 1 (kunalthakare2205@gmail.com) logged in successfully.
+2026-07-18 17:00:54.935 +05:30 [INF] User 1 (kunalthakare2205@gmail.com) logged in successfully.
+2026-07-18 17:06:16.202 +05:30 [INF] User 1 (kunalthakare2205@gmail.com) logged in successfully.
+2026-07-18 17:08:45.506 +05:30 [INF] ADMIN ACTION | Added Stock | Symbol: string | Company: string | Price: 0
+2026-07-18 17:09:13.943 +05:30 [INF] ADMIN ACTION | Deleted Stock | Symbol: string

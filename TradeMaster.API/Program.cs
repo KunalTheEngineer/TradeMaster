@@ -7,10 +7,27 @@ using TradeMaster.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.AspNetCore.Hosting.Builder;
 using Microsoft.OpenApi.Models;
+using TradeMaster.API.Middleware;
+using Serilog;
+
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+    .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
+
+    .WriteTo.Console()
+    .WriteTo.File(
+        "Logs/log-.txt",
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 30)
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog();
 
 // JWT TOKEN SERVICE
 
@@ -45,13 +62,18 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 
 builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<IStockService, StockService>();
-builder.Services.AddScoped<IUserRepository,UserRepository>();
-builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<IJwtService, JwtService>();
-builder.Services.AddScoped<IHoldingRepository, HoldingRepository>();
 builder.Services.AddScoped<IHoldingService, HoldingService>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IPortfolioService, PortfolioService>();
+builder.Services.AddScoped<IWatchListService, WatchListService>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<IHoldingRepository, HoldingRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IWatchListRepository, WatchListRepository>();
 
 
 // Add services to the container.
@@ -60,7 +82,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-//AUTHORIZATION FOR SWAGGER
 //AUTHORIZATION FOR SWAGGER
 builder.Services.AddSwaggerGen(options =>
 {
@@ -100,6 +121,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

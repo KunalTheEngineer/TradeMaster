@@ -11,6 +11,8 @@ namespace TradeMaster.Core.Entities
 
         public string PasswordHash { get; set; } = string.Empty;
 
+        public string Role { get; set; } = "User";
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public ICollection<Order> Orders { get; set; } = new List<Order>();

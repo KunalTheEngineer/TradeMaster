@@ -10,5 +10,7 @@ namespace TradeMaster.Core.Interfaces
         Task<List<Order>> GetAllOrdersAsync();
 
         Task<Order?> GetOrderByIdAsync(int orderId);
+
+        Task<List<Order>> GetOrdersByUserIdAsync(int userId);
     }
 }

@@ -12,5 +12,7 @@ namespace TradeMaster.Application.Interfaces
         Task<OrderResponseDto?> GetOrderByIdAsync(int orderId);
 
         Task<string> SellOrderAsync(CreateOrderDto request);
+
+        Task<List<OrderHistoryDto>> GetOrderHistoryAsync(int userId);
     }
 }

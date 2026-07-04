@@ -49,5 +49,13 @@ namespace TradeMaster.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("history/{userId}")]
+        public async Task<IActionResult> GetOrderHistory(int userId)
+        {
+            var history = await _orderService.GetOrderHistoryAsync(userId);
+
+            return Ok(history);
+        }
     }
 }

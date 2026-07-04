@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TradeMaster.Application.DTOs;
 using TradeMaster.Application.Interfaces;
+using TradeMaster.Core.QueryParameters;
 
 namespace TradeMaster.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class StockController : ControllerBase
     {
         private readonly IStockService _stockService;
@@ -18,6 +19,7 @@ namespace TradeMaster.API.Controllers
             _stockService = stockService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddStock(CreateStockDto request)
         {
@@ -27,11 +29,11 @@ namespace TradeMaster.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllStocks()
+        public async Task<IActionResult> GetAllStocks([FromQuery] StockQueryParameters query)
         {
-            var result = await _stockService.GetAllStockAsync();
+            var stocks = await _stockService.GetAllStockAsync(query);
 
-            return Ok(result);
+            return Ok(stocks);
         }
 
         [HttpGet("{id}")]
@@ -47,6 +49,7 @@ namespace TradeMaster.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateStock(int id, UpdateStockDto request)
         {
@@ -55,6 +58,7 @@ namespace TradeMaster.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStock(int id)
         {
