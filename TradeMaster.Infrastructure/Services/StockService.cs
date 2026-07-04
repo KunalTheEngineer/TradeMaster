@@ -3,6 +3,7 @@ using TradeMaster.Core.Entities;
 using TradeMaster.Core.Interfaces;
 using TradeMaster.Application.Interfaces;
 using Microsoft.Extensions.Logging;
+using TradeMaster.Core.QueryParameters;
 
 namespace TradeMaster.Infrastructure.Services
 {
@@ -36,15 +37,30 @@ namespace TradeMaster.Infrastructure.Services
             return "Stock Added Successfully";
         }
 
-        public async Task<List<StockResponseDto>> GetAllStockAsync()
+        public async Task<PagedResponse<StockResponseDto>> GetAllStockAsync(StockQueryParameters query)
         {
-            var stocks = await _stockRepository.GetAllStocksAsync();
+            var stocks = await _stockRepository.GetAllStocksAsync(query);
 
-            return stocks.Select(x => new StockResponseDto 
-            { StockId = x.StockID, 
-              Symbol = x.Symbol, 
-              CompanyName = x.CompanyName,
-              CurrentPrice = x.CurrentPrice }).ToList();
+            var totalRecords = await _stockRepository.GetTotalStockCountAsync();
+
+            return new PagedResponse<StockResponseDto>
+            {
+                Data = stocks.Select(x => new StockResponseDto
+                {
+                    StockId = x.StockID,
+                    Symbol = x.Symbol,
+                    CompanyName = x.CompanyName,
+                    CurrentPrice = x.CurrentPrice
+                }).ToList(),
+
+                Page = query.Page,
+
+                PageSize = query.PageSize,
+
+                TotalRecords = totalRecords,
+
+                TotalPages = (int)Math.Ceiling((double)totalRecords / query.PageSize)
+            };
         }
 
         public async Task<StockResponseDto?> GetStockByIdAsync(int stockId)
