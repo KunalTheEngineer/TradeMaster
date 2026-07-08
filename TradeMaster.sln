@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeMaster.Application", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeMaster.Infrastructure", "TradeMaster.Infrastructure\TradeMaster.Infrastructure.csproj", "{0B5DFA6E-4A72-44BC-B2F2-D380DE375B10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeMaster.Tests", "TradeMaster.Tests\TradeMaster.Tests.csproj", "{F324A386-3A74-4378-A44D-5C9DA689B626}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{0B5DFA6E-4A72-44BC-B2F2-D380DE375B10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B5DFA6E-4A72-44BC-B2F2-D380DE375B10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B5DFA6E-4A72-44BC-B2F2-D380DE375B10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F324A386-3A74-4378-A44D-5C9DA689B626}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F324A386-3A74-4378-A44D-5C9DA689B626}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F324A386-3A74-4378-A44D-5C9DA689B626}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F324A386-3A74-4378-A44D-5C9DA689B626}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
