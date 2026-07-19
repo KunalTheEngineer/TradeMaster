@@ -177,28 +177,6 @@ TradeMaster
 
 ---
 
-# 🔄 Request Flow
-
-```
-Client
-   │
-   ▼
-Controller
-   │
-   ▼
-Service
-   │
-   ▼
-Repository
-   │
-   ▼
-Entity Framework Core
-   │
-   ▼
-SQL Server
-```
-
-The Repository Pattern keeps the business logic independent of the database implementation, making the application easier to test and maintain.
 
 # 🗄️ Database Schema
 
@@ -217,58 +195,6 @@ TradeMaster uses **SQL Server** as the relational database and **Entity Framewor
 
 ---
 
-## Entity Relationship Overview
-
-```
-Users
- ├──────────────┐
- │              │
- │              ▼
- │          Watchlists
- │
- ├──────────────► Holdings
- │                    │
- │                    ▼
- │                Transactions
- │
- └──────────────► Orders
-
-Stocks
- ├────────► Orders
- ├────────► Holdings
- ├────────► Transactions
- └────────► Watchlists
-```
-
----
-
-# 🔐 Authentication Flow
-
-TradeMaster secures all protected endpoints using **JWT (JSON Web Tokens)**.
-
-```
-User Login
-     │
-     ▼
-Validate Credentials
-     │
-     ▼
-Generate JWT Token
-     │
-     ▼
-Return Token
-     │
-     ▼
-Client Stores Token
-     │
-     ▼
-Authorization Header
-Bearer <JWT_TOKEN>
-     │
-     ▼
-Protected API Access
-```
-
 Passwords are securely hashed using **BCrypt** before being stored in the database.
 
 ---
@@ -284,54 +210,6 @@ Passwords are securely hashed using **BCrypt** before being stored in the databa
 
 ---
 
-## Stock Management
-
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/api/Stock` | Get all stocks |
-| GET | `/api/Stock/{id}` | Get stock by ID |
-| POST | `/api/Stock` | Add a new stock |
-| PUT | `/api/Stock/{id}` | Update stock details |
-| DELETE | `/api/Stock/{id}` | Delete stock |
-
----
-
-## Trading
-
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| POST | `/api/Trade/buy` | Buy stocks |
-| POST | `/api/Trade/sell` | Sell stocks |
-
----
-
-## Portfolio
-
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/api/Holding` | View current holdings |
-| GET | `/api/Portfolio` | Portfolio summary |
-
----
-
-## Transactions
-
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/api/Transaction` | View trade history |
-
----
-
-## Watchlist
-
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/api/Watchlist` | View watchlist |
-| POST | `/api/Watchlist` | Add stock to watchlist |
-| DELETE | `/api/Watchlist/{id}` | Remove stock from watchlist |
-
----
-
 # 🔍 Search, Sorting & Pagination
 
 TradeMaster supports efficient querying for large datasets.
@@ -341,8 +219,6 @@ TradeMaster supports efficient querying for large datasets.
 ```
 GET /api/Stock?pageNumber=1&pageSize=10
 ```
-
----
 
 ### Search
 
@@ -366,7 +242,6 @@ GET /api/Stock?sortBy=price&sortOrder=desc
 GET /api/Stock?pageNumber=1&pageSize=10&search=Reliance&sortBy=currentPrice&sortOrder=asc
 ```
 
----
 
 # 📄 Sample API Response
 
@@ -378,20 +253,6 @@ GET /api/Stock?pageNumber=1&pageSize=10&search=Reliance&sortBy=currentPrice&sort
   "currentPrice": 3725.50
 }
 ```
-
----
-
-# ✅ HTTP Status Codes
-
-| Status Code | Meaning |
-|-------------|----------|
-| **200 OK** | Request completed successfully |
-| **201 Created** | Resource created successfully |
-| **400 Bad Request** | Invalid request data |
-| **401 Unauthorized** | Authentication required |
-| **403 Forbidden** | Access denied |
-| **404 Not Found** | Resource not found |
-| **500 Internal Server Error** | Unexpected server error |
 
 # 🚀 Getting Started
 
@@ -601,11 +462,6 @@ If you would like to contribute:
 
 ---
 
-# 📄 License
-
-This project is licensed under the MIT License.
-
----
 
 # 👨‍💻 Author
 
