@@ -199,3 +199,431 @@ SQL Server
 ```
 
 The Repository Pattern keeps the business logic independent of the database implementation, making the application easier to test and maintain.
+
+# 🗄️ Database Schema
+
+TradeMaster uses **SQL Server** as the relational database and **Entity Framework Core (Code First)** for database modeling and migrations.
+
+## Database Entities
+
+| Entity | Description |
+|---------|-------------|
+| **Users** | Stores user profile and authentication information |
+| **Stocks** | Stores available stocks for trading |
+| **Orders** | Records buy and sell orders placed by users |
+| **Holdings** | Maintains the current portfolio of each user |
+| **Transactions** | Stores completed trade history |
+| **Watchlists** | Stores stocks bookmarked by users |
+
+---
+
+## Entity Relationship Overview
+
+```
+Users
+ ├──────────────┐
+ │              │
+ │              ▼
+ │          Watchlists
+ │
+ ├──────────────► Holdings
+ │                    │
+ │                    ▼
+ │                Transactions
+ │
+ └──────────────► Orders
+
+Stocks
+ ├────────► Orders
+ ├────────► Holdings
+ ├────────► Transactions
+ └────────► Watchlists
+```
+
+---
+
+# 🔐 Authentication Flow
+
+TradeMaster secures all protected endpoints using **JWT (JSON Web Tokens)**.
+
+```
+User Login
+     │
+     ▼
+Validate Credentials
+     │
+     ▼
+Generate JWT Token
+     │
+     ▼
+Return Token
+     │
+     ▼
+Client Stores Token
+     │
+     ▼
+Authorization Header
+Bearer <JWT_TOKEN>
+     │
+     ▼
+Protected API Access
+```
+
+Passwords are securely hashed using **BCrypt** before being stored in the database.
+
+---
+
+# 📡 REST API Overview
+
+## Authentication
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| POST | `/api/Auth/register` | Register a new user |
+| POST | `/api/Auth/login` | Authenticate user and generate JWT |
+
+---
+
+## Stock Management
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/Stock` | Get all stocks |
+| GET | `/api/Stock/{id}` | Get stock by ID |
+| POST | `/api/Stock` | Add a new stock |
+| PUT | `/api/Stock/{id}` | Update stock details |
+| DELETE | `/api/Stock/{id}` | Delete stock |
+
+---
+
+## Trading
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| POST | `/api/Trade/buy` | Buy stocks |
+| POST | `/api/Trade/sell` | Sell stocks |
+
+---
+
+## Portfolio
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/Holding` | View current holdings |
+| GET | `/api/Portfolio` | Portfolio summary |
+
+---
+
+## Transactions
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/Transaction` | View trade history |
+
+---
+
+## Watchlist
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/Watchlist` | View watchlist |
+| POST | `/api/Watchlist` | Add stock to watchlist |
+| DELETE | `/api/Watchlist/{id}` | Remove stock from watchlist |
+
+---
+
+# 🔍 Search, Sorting & Pagination
+
+TradeMaster supports efficient querying for large datasets.
+
+### Pagination
+
+```
+GET /api/Stock?pageNumber=1&pageSize=10
+```
+
+---
+
+### Search
+
+```
+GET /api/Stock?search=TCS
+```
+
+---
+
+### Sorting
+
+```
+GET /api/Stock?sortBy=price&sortOrder=desc
+```
+
+---
+
+### Combined Query
+
+```
+GET /api/Stock?pageNumber=1&pageSize=10&search=Reliance&sortBy=currentPrice&sortOrder=asc
+```
+
+---
+
+# 📄 Sample API Response
+
+```json
+{
+  "id": 1,
+  "symbol": "TCS",
+  "companyName": "Tata Consultancy Services",
+  "currentPrice": 3725.50
+}
+```
+
+---
+
+# ✅ HTTP Status Codes
+
+| Status Code | Meaning |
+|-------------|----------|
+| **200 OK** | Request completed successfully |
+| **201 Created** | Resource created successfully |
+| **400 Bad Request** | Invalid request data |
+| **401 Unauthorized** | Authentication required |
+| **403 Forbidden** | Access denied |
+| **404 Not Found** | Resource not found |
+| **500 Internal Server Error** | Unexpected server error |
+
+# 🚀 Getting Started
+
+## Prerequisites
+
+Before running the project, ensure you have the following installed:
+
+- .NET 8 SDK
+- SQL Server
+- Visual Studio 2022 / Visual Studio Code
+- Git
+- Docker Desktop *(Optional)*
+
+---
+
+## Clone the Repository
+
+```bash
+git clone https://github.com/<your-username>/TradeMaster.git
+cd TradeMaster
+```
+
+---
+
+## Configure the Database
+
+Update the connection string in `appsettings.json`.
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=YOUR_SERVER;Database=TradeMaster;Trusted_Connection=True;TrustServerCertificate=True;"
+}
+```
+
+If using SQL Server Authentication:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=YOUR_SERVER;Database=TradeMaster;User Id=sa;Password=YOUR_PASSWORD;TrustServerCertificate=True;"
+}
+```
+
+---
+
+## Apply Entity Framework Migrations
+
+```bash
+dotnet ef database update
+```
+
+---
+
+## Run the Application
+
+```bash
+dotnet run
+```
+
+The API will be available at:
+
+```
+https://localhost:5001
+```
+
+or
+
+```
+http://localhost:5000
+```
+
+depending on your launch profile.
+
+---
+
+# 📖 Swagger API Documentation
+
+Once the application is running, open:
+
+```
+https://localhost:5001/swagger
+```
+
+Swagger provides interactive documentation for all REST endpoints, allowing developers to test APIs directly from the browser.
+
+---
+
+# 🧪 Unit Testing
+
+TradeMaster includes automated unit tests using **xUnit** and **Moq**.
+
+Run all tests:
+
+```bash
+dotnet test
+```
+
+The test suite validates:
+
+- Repository methods
+- Service layer business logic
+- Authentication functionality
+- Trade execution workflows
+- API behavior
+
+---
+
+# ⚙️ Continuous Integration
+
+This project uses **GitHub Actions** to automate the build and test process.
+
+The CI workflow performs the following tasks on every push and pull request:
+
+- Restore NuGet packages
+- Build the solution
+- Execute unit tests
+- Verify project integrity
+
+---
+
+# 🐳 Docker Support
+
+Docker support has been added to simplify deployment using containers.
+
+Current setup includes:
+
+- Multi-stage Dockerfile
+- Docker Compose
+- SQL Server Container
+- ASP.NET Core Container
+
+> **Note:** Docker deployment is currently under active development and may require additional configuration depending on the local environment.
+
+---
+
+# 📸 Project Screenshots
+
+The following screenshots can be added here:
+
+- Login API
+- Register API
+- Swagger Home Page
+- JWT Authentication
+- Stock APIs
+- Buy/Sell APIs
+- Portfolio APIs
+- SQL Server Database
+- GitHub Actions Workflow
+
+Example:
+
+```markdown
+![Swagger](images/swagger-home.png)
+```
+
+---
+
+# 🚀 Future Enhancements
+
+Some planned improvements include:
+
+- Real-time Market Data Integration
+- WebSocket-based Live Price Streaming
+- Redis Caching
+- Email Notifications
+- Role-Based Access Control (RBAC)
+- Refresh Token Authentication
+- Audit Logging
+- Portfolio Analytics Dashboard
+- Performance Optimization
+- Kubernetes Deployment
+
+---
+
+# 💡 Key Learning Outcomes
+
+This project demonstrates practical experience with:
+
+- ASP.NET Core Web API
+- Clean Architecture
+- SOLID Principles
+- Repository Pattern
+- Dependency Injection
+- Entity Framework Core
+- SQL Server
+- JWT Authentication
+- BCrypt Password Hashing
+- RESTful API Design
+- Pagination, Searching & Sorting
+- Global Exception Handling
+- Logging with Serilog
+- Unit Testing using xUnit & Moq
+- GitHub Actions CI/CD
+- Docker Fundamentals
+
+---
+
+# 🤝 Contributing
+
+Contributions, suggestions, and improvements are welcome.
+
+If you would like to contribute:
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Commit your changes.
+4. Open a Pull Request.
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+# 👨‍💻 Author
+
+**Kunal Thakare**
+
+- GitHub: https://github.com/<your-username>
+- LinkedIn: https://www.linkedin.com/in/<your-linkedin>
+
+---
+
+# ⭐ Support
+
+If you found this project useful, consider giving it a ⭐ on GitHub.
+
+It helps others discover the project and motivates continued development.
+
+---
+
+## 📌 Project Summary
+
+TradeMaster is an enterprise-grade trading and portfolio management backend built using ASP.NET Core Web API. The project follows Clean Architecture principles and demonstrates secure authentication, scalable application design, modern software engineering practices, automated testing, and CI/CD workflows. It serves as a production-inspired backend application for learning, portfolio development, and interview preparation.
