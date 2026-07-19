@@ -199,17 +199,6 @@ Passwords are securely hashed using **BCrypt** before being stored in the databa
 
 ---
 
-# 📡 REST API Overview
-
-## Authentication
-
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| POST | `/api/Auth/register` | Register a new user |
-| POST | `/api/Auth/login` | Authenticate user and generate JWT |
-
----
-
 # 🔍 Search, Sorting & Pagination
 
 TradeMaster supports efficient querying for large datasets.
