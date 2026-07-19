@@ -46,3 +46,156 @@ The primary objective of this project is to build a production-style backend arc
 - 🐳 Docker Support (Work in Progress)
 
 ---
+# 🛠️ Tech Stack
+
+| Category | Technologies |
+|----------|--------------|
+| **Language** | C# |
+| **Framework** | ASP.NET Core 8 Web API |
+| **Database** | SQL Server |
+| **ORM** | Entity Framework Core |
+| **Authentication** | JWT Bearer Authentication |
+| **Password Security** | BCrypt |
+| **Logging** | Serilog |
+| **API Testing** | Swagger (OpenAPI) |
+| **Testing** | xUnit, Moq |
+| **CI/CD** | GitHub Actions |
+| **Containerization** | Docker *(Docker Compose - In Progress)* |
+| **Version Control** | Git & GitHub |
+
+---
+
+# 🏛️ Project Architecture
+
+TradeMaster follows **Clean Architecture**, ensuring separation of concerns and making the application scalable, testable, and maintainable.
+
+```
+                Client / Swagger
+                       │
+                       ▼
+              ASP.NET Core Web API
+                       │
+                Controllers Layer
+                       │
+                       ▼
+                 Service Layer
+          (Business Logic & Validation)
+                       │
+                       ▼
+              Repository Layer
+                       │
+                       ▼
+           Entity Framework Core
+                       │
+                       ▼
+                  SQL Server
+```
+
+### Architecture Layers
+
+### 📌 API Layer
+
+Responsible for:
+
+- Receiving HTTP requests
+- Model Validation
+- Authentication
+- Returning HTTP responses
+
+---
+
+### 📌 Application Layer
+
+Contains:
+
+- Business Logic
+- Service Interfaces
+- DTOs
+- Validation Rules
+
+---
+
+### 📌 Infrastructure Layer
+
+Contains:
+
+- Entity Framework Core
+- Repository Implementations
+- JWT Service
+- Database Access
+- Logging
+
+---
+
+### 📌 Core Layer
+
+Contains:
+
+- Entities
+- Repository Interfaces
+- Domain Models
+
+---
+
+# 📂 Project Structure
+
+```
+TradeMaster
+│
+├── TradeMaster.API
+│   ├── Controllers
+│   ├── Middleware
+│   ├── Program.cs
+│   ├── appsettings.json
+│   └── Dockerfile
+│
+├── TradeMaster.Application
+│   ├── DTOs
+│   ├── Interfaces
+│   └── Services
+│
+├── TradeMaster.Core
+│   ├── Entities
+│   └── Interfaces
+│
+├── TradeMaster.Infrastructure
+│   ├── Data
+│   ├── Repositories
+│   ├── Services
+│   └── Migrations
+│
+├── TradeMaster.Tests
+│
+├── .github
+│   └── workflows
+│       └── dotnet.yml
+│
+├── docker-compose.yml
+├── README.md
+└── TradeMaster.sln
+```
+
+---
+
+# 🔄 Request Flow
+
+```
+Client
+   │
+   ▼
+Controller
+   │
+   ▼
+Service
+   │
+   ▼
+Repository
+   │
+   ▼
+Entity Framework Core
+   │
+   ▼
+SQL Server
+```
+
+The Repository Pattern keeps the business logic independent of the database implementation, making the application easier to test and maintain.
